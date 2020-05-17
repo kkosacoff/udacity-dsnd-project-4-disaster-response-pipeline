@@ -4,7 +4,10 @@ import numpy as np
 from sqlalchemy import create_engine
 
 def load_data(messages_filepath, categories_filepath):
-    
+    '''
+		This function gets as input 2 files, one with messages information, and another one with categories
+		Then it will merge both of them into a single dataframe on the 'id' column
+    '''
     messages = pd.read_csv(messages_filepath)
     categories = pd.read_csv(categories_filepath)
     
@@ -14,16 +17,20 @@ def load_data(messages_filepath, categories_filepath):
 
 
 def clean_data(df):
+	'''
+		This function cleans the dataframe returned by the load_data function
+		It expands the categories column into one category per column and the leaves a numerical value of 1 or 0 for each observation
+		Then removes categories column from the original dataframe.
+		Finally it returns a dataframe with all the new category columns
+	'''
     
     categories = df['categories'].str.split(';', expand=True)
     
     # select the first row of the categories dataframe
     row = categories.iloc[0]
 
-    # use this row to extract a list of new column names for categories.
-    # one way is to apply a lambda function that takes everything 
-    # up to the second to last character of each string with slicing
-    category_colnames = row.apply(lambda x: x[:-2])
+
+    category_colnames = row.apply(lambda x: x[:-2]) ##extract category names from 1st row, slicing full string, minus 2 last characters.
     categories.columns = category_colnames
     
     for column in categories:
@@ -44,6 +51,11 @@ def clean_data(df):
     return df
 
 def save_data(df, database_filename):
+	'''
+		Function that has 2 inputs, a Dataframe, and a database file name.
+		This function then creates a database if not yet created, or will overwrite the previous one with the contents of the dataframe
+		This function doesn't return anything, it only writes the database.
+	'''
     database_filename = 'sqlite:///' + database_filename
     engine = create_engine(database_filename)
     df.to_sql('messages', engine, index=False, if_exists='replace')
