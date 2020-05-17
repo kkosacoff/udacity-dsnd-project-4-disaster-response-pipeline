@@ -27,3 +27,24 @@ In the train_classifier.py, I write a machine learning pipeline that:
 
 3. Flask Web App
 Web app that show count of categories and allow users to input a message and the app will clasify to which categories it belongs to
+
+## How to use the App
+
+First you need to ensure you have Python 3 installed in your computer
+
+1. Download this repository
+2. Run the following script from your terminal to clean the datasets, last argument is the name of the database you want to save your cleaned dataset.
+```
+python process_data.py disaster_messages.csv disaster_categories.csv DisasterResponse.db
+```
+
+3. Run the following from your terminal to train your model, providing where your dataset is saved (DisasterResponse.db), and where you want to save your model (classifier.pkl)
+
+```
+python train_classifier.py ../data/DisasterResponse.db classifier.pkl
+```
+
+4. Run the following script from your terminal and the app should open from your browser.
+```
+python run.py
+```
