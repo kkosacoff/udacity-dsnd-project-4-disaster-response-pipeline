@@ -82,7 +82,7 @@ def build_model():
     return model
 
 
-def evaluate_model(model, X_test, Y_test):
+def evaluate_model(model, X_test, Y_test, category_names):
     '''
         Function gets as input:
             Model returned from build_model() function
