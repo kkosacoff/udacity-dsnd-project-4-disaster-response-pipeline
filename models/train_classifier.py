@@ -35,7 +35,10 @@ stop_words = stopwords.words("english")
 lemmatizer = WordNetLemmatizer()
 
 def load_data(database_filepath):
-    # load data from database
+    '''
+        Input is the filepath of the database, with that function loads data from database
+        Returns X (predictor), Y (variables to predict), category names 
+    '''
     database_filepath = 'sqlite:///' + database_filepath
     engine = create_engine(database_filepath)
     df = pd.read_sql_table('messages', engine)
@@ -48,6 +51,10 @@ def load_data(database_filepath):
 
 
 def tokenize(text):
+    '''
+        Input is text, which in this case it will be used for the messages.
+        Custom tokenizer to use in our model that converts words into clean, lemmatized tokens for easier processing in the model
+    '''
     
     tokens = word_tokenize(text)
     
@@ -60,6 +67,11 @@ def tokenize(text):
 
 
 def build_model():
+    '''
+        We define the model here using the Pipeline functionality from sklearn.
+        Model uses CountVectorizer and TfidfTransformer as transformers and SGDCClassifier as classifier
+        It returns the model.
+    '''
     
     model = Pipeline([
                             ('vect', CountVectorizer(tokenizer = tokenize)),
@@ -70,7 +82,14 @@ def build_model():
     return model
 
 
-def evaluate_model(model, X_test, Y_test, category_names):
+def evaluate_model(model, X_test, Y_test):
+    '''
+        Function gets as input:
+            Model returned from build_model() function
+            X_test to predict values from the model
+            Y_test to compared predicted values
+        Function prints results of the model on how well it predicted Y
+    '''
     
     Y_pred = model.predict(X_test)
     
@@ -80,6 +99,10 @@ def evaluate_model(model, X_test, Y_test, category_names):
 
 
 def save_model(model, model_filepath):
+    '''
+        Inputs the model and a filepath
+        Saves the model as a pkl file for later use in the model_filepath location
+    '''
     
     with open(model_filepath, 'wb') as file:
         pickle.dump(model, file)
