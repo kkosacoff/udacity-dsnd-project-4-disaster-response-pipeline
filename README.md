@@ -44,7 +44,8 @@ python process_data.py disaster_messages.csv disaster_categories.csv DisasterRes
 python train_classifier.py ../data/DisasterResponse.db classifier.pkl
 ```
 
-4. Run the following script from your terminal and the app should open from your browser.
+4. Run the following script from your terminal.
 ```
 python run.py
 ```
+5. Go to [this](http://0.0.0.0:3001/) address in your browser, or copy and paste http://0.0.0.0:3001/ and hit enter in your browser and hit enter.
