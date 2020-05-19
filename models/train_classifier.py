@@ -74,12 +74,20 @@ def build_model():
     '''
     
     model = Pipeline([
-                            ('vect', CountVectorizer(tokenizer = tokenize)),
-                            ('tfidf', TfidfTransformer()),
-                            ('clf', MultiOutputClassifier(SGDClassifier()))
-                          ])
+                        ('vect', CountVectorizer(tokenizer = tokenize)),
+                        ('tfidf', TfidfTransformer()),
+                        ('clf', MultiOutputClassifier(SGDClassifier()))
+                    ])
+    parameters = {
+                    'vect__ngram_range': ((1,1), (1,2)),
+                    'tfidf__use_idf': (True, False),
+                    'clf__estimator__class_weight': (None, 'balanced'),
+                    'clf__estimator__alpha' : (0.0001, 0.00015)
+                    }
+
+    cv = GridSearchCV(model, param_grid=parameters, n_jobs=-1)
     
-    return model
+    return cv
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
